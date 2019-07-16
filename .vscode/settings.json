@@ -2,4 +2,14 @@
     "python.pythonPath": "venv/bin/python3",
     "python.poetryPath": "venv/bin/poetry",
     "python.formatting.provider": "black",
+    "editor.rulers": [
+        79,
+        72
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
 }

@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "venv/bin/python3",
+    "python.poetryPath": "venv/bin/poetry",
+    "python.formatting.provider": "black",
+}

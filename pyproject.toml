@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "polka_curses"
+version = "0.1.0"
+description = "The curses interface for the Polka website (https://polka.academy/)"
+authors = ["Dima Koskin <dmksknn@gmail.com>"]
+license = "MIT"
+
+readme = "README.md"
+
+homepage = "https://github.com/dmkskn/polka_curses/"
+
+keywords = ["polka", "books", "literature", "russian", "api", "urwid", "cli", "terminal", "curses", "tui"]
+
+classifiers = [
+    "Topic :: Software Development :: Libraries",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.7"
+polka = "^2.4"
+urwid = "^2.0"
+
+
+[tool.poetry.dev-dependencies]
+black = {version = "^18.3-alpha.0", allows-prereleases = true}
+pytest = "^5.0"
+pre-commit = "^1.17"
+
+
+[tool.poetry.scripts]
+polka = "polka_curses.main:main"
+
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+
+[tool.black]
+line-length = 79

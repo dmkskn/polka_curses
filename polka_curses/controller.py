@@ -24,3 +24,24 @@ class ViewController:
     def exit(self):
         """Stop the main loop."""
         raise urwid.ExitMainLoop()
+
+    def move_right(self):
+        tab_name = self.view.focus_next_tab()
+        self.draw_body_by_tab_name(tab_name)
+
+    def move_left(self):
+        tab_name = self.view.focus_prev_tab()
+        self.draw_body_by_tab_name(tab_name)
+
+    def draw_body_by_tab_name(self, tab_name):
+        mode = Mode.get(tab_name)
+        if mode == Mode.BOOKS_PAGE:
+            self.view.draw_books(self.model.books)
+        elif mode == Mode.LISTS_PAGE:
+            self.view.draw_lists(self.model.lists)
+        elif mode == Mode.EXPERTS_PAGE:
+            self.view.draw_experts(self.model.experts)
+        else:
+            self.view.draw_search()
+        self.mode = mode
+        self.loop.draw_screen()

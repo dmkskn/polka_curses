@@ -9,6 +9,12 @@ class Mode(Enum):
     SEARCH_PAGE = "ПОИСК"
 
     @classmethod
+    def get(cls, raw_value):
+        for mode in cls:
+            if mode.value == raw_value:
+                return mode
+
+    @classmethod
     def tabs(cls):
         return {
             cls.BOOKS_PAGE,
@@ -53,12 +59,26 @@ PALETTE = [
 
 KEYS = [
     Key(
+        name="Left",
+        description="ВЛЕВО",
+        buttons=["left"],
+        action="move_left",
+        modes=Mode.tabs(),
+    ),
+    Key(
+        name="Right",
+        description="ВПРАВО",
+        buttons=["right"],
+        action="move_right",
+        modes=Mode.tabs(),
+    ),
+    Key(
         name="Esc",
         description="ВЫХОД",
         buttons=["esc"],
         action="exit",
         modes=Mode.tabs(),
-    )
+    ),
 ]
 
 

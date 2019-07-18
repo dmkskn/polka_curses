@@ -33,6 +33,3 @@ class BookItem(urwid.WidgetWrap):
 
     def selectable(self):
         return True
-
-    def keypress(self, size, key):
-        return key

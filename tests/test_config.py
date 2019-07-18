@@ -13,3 +13,8 @@ def test_key_is_tuple():
 
 def test_get_key_action():
     assert get_key_action(Mode.BOOKS_PAGE, "esc") == "exit"
+
+
+def test_get_mode_by_raw_value():
+    assert Mode.get("КНИГИ") == Mode.BOOKS_PAGE
+    assert Mode.get("НЕ СУЩЕСТВУЕТ") is None

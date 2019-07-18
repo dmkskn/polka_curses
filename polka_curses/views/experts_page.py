@@ -4,7 +4,7 @@ import urwid
 class ExpertsPage(urwid.ListBox):
     def __init__(self, experts):
         self.experts = experts
-        widgets = [ExpertItem(b) for b in self.experts]
+        widgets = [ExpertItem(e) for e in self.experts]
         super().__init__(urwid.SimpleFocusListWalker(widgets))
 
     def get_focused_expert(self):

@@ -36,18 +36,14 @@ class Palette(NamedTuple):
 
 
 class Key(NamedTuple):
-    """Represents a keyboard input sent by a user’s terminal.
-
-    - `name` is a human-readable name
-    - `buttons` is an input returned by Urwid
-    - `action` is a method name in the controller
-    - `modes` points out for which Modes this Key is relevant"""
+    """Represents a keyboard input sent by a user’s terminal."""
 
     name: str
     description: str
     buttons: List[str]
     action: str
     modes: Set[Mode]
+    hidden: bool = False
 
 
 PALETTE = [
@@ -66,6 +62,7 @@ KEYS = [
         buttons=["left"],
         action="move_left",
         modes=Mode.tabs(),
+        hidden=True,
     ),
     Key(
         name="Right",
@@ -73,6 +70,7 @@ KEYS = [
         buttons=["right"],
         action="move_right",
         modes=Mode.tabs(),
+        hidden=True,
     ),
     Key(
         name="Enter",
@@ -107,3 +105,11 @@ def get_key_action(mode, key):
         if key in item.buttons:
             return item.action
     return None
+
+
+def help_string_for(mode):
+    """Returns a string like `"ВЫХОД (Esc), ОТКРЫТЬ (Enter)"`."""
+    keys = get_keys_by_mode(mode)
+    keys = [f"{k.description} ({k.name})" for k in keys if not k.hidden]
+    keys = ", ".join(keys)
+    return keys

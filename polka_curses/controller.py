@@ -2,7 +2,7 @@ from functools import wraps
 
 import urwid
 
-from .config import PALETTE, Mode
+from .config import PALETTE, Mode, help_string_for
 from .handler import InputHandler
 
 
@@ -18,8 +18,8 @@ def update(func):
 class ViewController:
     def __init__(self, view, model):
         self.model = model()
-        self.view = view(self.model.books)
         self.mode = Mode.BOOKS_PAGE
+        self.view = view(self.model.books, rmsg=help_string_for(self.mode))
         self.input_handler = InputHandler(self)
 
     def run(self):
@@ -47,14 +47,15 @@ class ViewController:
     @update
     def draw_body_by_tab_name(self, tab_name):
         mode = Mode.get(tab_name)
+        help_string = help_string_for(mode)
         if mode == Mode.BOOKS_PAGE:
-            self.view.draw_books(self.model.books)
+            self.view.draw_books(self.model.books, rmsg=help_string)
         elif mode == Mode.LISTS_PAGE:
-            self.view.draw_lists(self.model.lists)
+            self.view.draw_lists(self.model.lists, rmsg=help_string)
         elif mode == Mode.EXPERTS_PAGE:
-            self.view.draw_experts(self.model.experts)
+            self.view.draw_experts(self.model.experts, rmsg=help_string)
         else:
-            self.view.draw_search()
+            self.view.draw_search(rmsg=help_string)
         self.mode = mode
 
     @update
@@ -63,13 +64,16 @@ class ViewController:
         results = self.model.search(query)
         if results:
             self.mode = Mode.SEARCH_RESULTS_PAGE
-            self.view.show_search_results(results)
+            help_string = help_string_for(self.mode)
+            self.view.show_search_results(results, rmsg=help_string)
         else:
             self.mode = Mode.SEARCH_PAGE
-            self.view.draw_search(lmsg="Нет результатов")
+            help_string = help_string_for(self.mode)
+            self.view.draw_search("Нет результатов", help_string)
 
     @update
     def show_search(self):
         """Show search page."""
         self.mode = Mode.SEARCH_PAGE
-        self.view.draw_search()
+        help_string = help_string_for(self.mode)
+        self.view.draw_search(rmsg=help_string)

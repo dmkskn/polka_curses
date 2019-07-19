@@ -10,7 +10,7 @@ from polka_curses.views.lists_page import ListsPage
 from polka_curses.views.experts_page import ExpertsPage
 from polka_curses.views.search_page import SearchPage, SearchResultsPage
 from polka_curses.model import Model
-from polka_curses.config import Mode
+from polka_curses.config import Mode, help_string_for
 
 
 @pytest.fixture(scope="function")
@@ -52,6 +52,13 @@ def test_draw_body_by_tab_name(controller):
     controller.draw_body_by_tab_name("ПОИСК")
     assert isinstance(view.body, SearchPage)
     assert controller.loop.draw_screen.called
+
+
+def test_add_help_string_when_draw_body(controller):
+    view = controller.view
+    for mode in Mode.tabs():
+        controller.draw_body_by_tab_name(mode.value)
+        assert view.footer.right == help_string_for(mode)
 
 
 def test_show_search(controller):

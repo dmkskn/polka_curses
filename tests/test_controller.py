@@ -4,18 +4,18 @@ import urwid
 from unittest.mock import MagicMock
 
 from polka_curses.controller import ViewController
-from polka_curses.view import View
+
 from polka_curses.views.books_page import BooksPage
 from polka_curses.views.lists_page import ListsPage
 from polka_curses.views.experts_page import ExpertsPage
 from polka_curses.views.search_page import SearchPage, SearchResultsPage
-from polka_curses.model import Model
+
 from polka_curses.config import Mode, help_string_for
 
 
 @pytest.fixture(scope="function")
 def controller():
-    controller = ViewController(View, Model)
+    controller = ViewController()
     controller.loop = MagicMock()
     return controller
 

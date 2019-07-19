@@ -3,6 +3,8 @@ from typing import NamedTuple, List, Set
 
 
 class Mode(Enum):
+    """The state in which the program is running."""
+
     BOOKS_PAGE = "КНИГИ"
     LISTS_PAGE = "СПИСКИ"
     EXPERTS_PAGE = "ЭКСПЕРТЫ"
@@ -97,18 +99,20 @@ KEYS = [
 
 
 def get_keys_by_mode(mode):
+    """Filtres `KEYS` by mode."""
     return (key for key in KEYS if mode in key.modes)
 
 
-def get_key_action(mode, key):
+def get_key_action(mode, button):
+    """Extracts the controller method name from a Key."""
     for item in get_keys_by_mode(mode):
-        if key in item.buttons:
+        if button in item.buttons:
             return item.action
     return None
 
 
 def help_string_for(mode):
-    """Returns a string like `"ВЫХОД (Esc), ОТКРЫТЬ (Enter)"`."""
+    """Returns a string like `"ВЫХОД (Esc), ОТКРЫТЬ (Enter), ..."`."""
     keys = get_keys_by_mode(mode)
     keys = [f"{k.description} ({k.name})" for k in keys if not k.hidden]
     keys = ", ".join(keys)

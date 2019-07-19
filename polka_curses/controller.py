@@ -4,9 +4,13 @@ import urwid
 
 from .config import PALETTE, Mode, help_string_for
 from .handler import InputHandler
+from .model import Model
+from .view import View
 
 
 def update(func):
+    """Updates the screen."""
+
     @wraps(func)
     def wrapper(self, *args, **kwargs):
         func(self, *args, **kwargs)
@@ -16,10 +20,13 @@ def update(func):
 
 
 class ViewController:
-    def __init__(self, view, model):
-        self.model = model()
+    """The core of the program. It have methods that give commands to
+    the `View` and have access to the Polka API through the `Model`."""
+
+    def __init__(self):
         self.mode = Mode.BOOKS_PAGE
-        self.view = view(self.model.books, rmsg=help_string_for(self.mode))
+        self.model = Model()
+        self.view = View(self.model.books, rmsg=help_string_for(self.mode))
         self.input_handler = InputHandler(self)
 
     def run(self):
@@ -37,11 +44,13 @@ class ViewController:
         raise urwid.ExitMainLoop()
 
     def move_right(self):
+        """Go to the next tab on the right."""
         tab_name = self.view.focus_next_tab()
         self.draw_body_by_tab_name(tab_name)
 
     def move_left(self):
-        tab_name = self.view.focus_prev_tab()
+        """Go to the previous tab on the left."""
+        tab_name = self.view.focus_previous_tab()
         self.draw_body_by_tab_name(tab_name)
 
     @update
@@ -60,6 +69,8 @@ class ViewController:
 
     @update
     def show_search_results(self):
+        """If the results exist, show them, and if not, show a new
+        search page."""
         query = self.view.get_search_query()
         results = self.model.search(query)
         if results:

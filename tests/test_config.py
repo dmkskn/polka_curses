@@ -1,5 +1,4 @@
 import pytest
-
 import polka_curses.config as config
 from polka_curses.config import Key, Mode, Palette
 
@@ -43,11 +42,9 @@ def test_key_is_tuple():
     assert issubclass(Key, tuple)
 
 
-def test_get_key_action(TEST_KEYS):
-    KEYS = config.KEYS
-    config.KEYS = TEST_KEYS
+def test_get_key_action(monkeypatch, TEST_KEYS):
+    monkeypatch.setattr(config, "KEYS", TEST_KEYS)
     assert config.get_key_action(Mode.BOOKS_PAGE, "esc") == "test_exit"
-    config.KEYS = KEYS
 
 
 def test_get_mode_by_raw_value():
@@ -55,9 +52,7 @@ def test_get_mode_by_raw_value():
     assert Mode.get("НЕ СУЩЕСТВУЕТ") is None
 
 
-def test_help_for_mode(TEST_KEYS):
-    KEYS = config.KEYS
-    config.KEYS = TEST_KEYS
+def test_help_for_mode(monkeypatch, TEST_KEYS):
+    monkeypatch.setattr(config, "KEYS", TEST_KEYS)
     result = config.help_string_for(Mode.BOOKS_PAGE)
     assert result == TEST_HELP_STRING_FOR_BOOKS_PAGE
-    config.KEYS = KEYS

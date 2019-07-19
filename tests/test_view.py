@@ -76,7 +76,7 @@ def test_get_search_query(view):
 
 def test_focus_next_tab(view):
     if view.header.is_last_index():
-        view.focus_prev_tab()
+        view.focus_previous_tab()
         i = view.header.index
     else:
         i = view.header.index
@@ -84,11 +84,11 @@ def test_focus_next_tab(view):
     assert view.header.index == i + 1
 
 
-def test_focus_prev_tab(view):
+def test_focus_previous_tab(view):
     if view.header.is_first_index():
         view.focus_next_tab()
         i = view.header.index
     else:
         i = view.header.index
-    view.focus_prev_tab()
+    view.focus_previous_tab()
     assert view.header.index == i - 1

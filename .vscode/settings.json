@@ -6,6 +6,8 @@
         79,
         72
     ],
+    "editor.formatOnSave": true,
+    "editor.trimAutoWhitespace": true,
     "python.testing.pytestArgs": [
         "tests"
     ],

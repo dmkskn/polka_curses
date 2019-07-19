@@ -3,7 +3,7 @@ import urwid
 from .views.books_page import BooksPage
 from .views.lists_page import ListsPage
 from .views.experts_page import ExpertsPage
-from .views.search_page import SearchPage
+from .views.search_page import SearchPage, SearchResultsPage
 from .views.tab_bar import TabBar
 from .views.status_bar import StatusBar
 
@@ -54,7 +54,7 @@ class View(urwid.WidgetWrap):
         self.set_footer(StatusBar(lmsg, rmsg))
 
     def show_search_results(self, results, lmsg="", rmsg=""):
-        self.body.show_results(results)
+        self.set_body(SearchResultsPage(results))
         self.set_footer(StatusBar(lmsg, rmsg))
 
     def get_search_query(self):

@@ -7,6 +7,7 @@ class Mode(Enum):
     LISTS_PAGE = "СПИСКИ"
     EXPERTS_PAGE = "ЭКСПЕРТЫ"
     SEARCH_PAGE = "ПОИСК"
+    SEARCH_RESULTS_PAGE = "РЕЗУЛЬТАТЫ ПОИСКА"
 
     @classmethod
     def get(cls, raw_value):
@@ -21,6 +22,7 @@ class Mode(Enum):
             cls.LISTS_PAGE,
             cls.EXPERTS_PAGE,
             cls.SEARCH_PAGE,
+            cls.SEARCH_RESULTS_PAGE,
         }
 
 
@@ -71,6 +73,20 @@ KEYS = [
         buttons=["right"],
         action="move_right",
         modes=Mode.tabs(),
+    ),
+    Key(
+        name="Enter",
+        description="ИСКАТЬ",
+        buttons=["enter"],
+        action="show_search_results",
+        modes={Mode.SEARCH_PAGE},
+    ),
+    Key(
+        name="Space",
+        action="show_search",
+        buttons=[" "],
+        description="НОВЫЙ ПОИСК",
+        modes={Mode.SEARCH_RESULTS_PAGE},
     ),
     Key(
         name="Esc",

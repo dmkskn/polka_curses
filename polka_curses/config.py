@@ -10,6 +10,9 @@ class Mode(Enum):
     EXPERTS_PAGE = "ЭКСПЕРТЫ"
     SEARCH_PAGE = "ПОИСК"
     SEARCH_RESULTS_PAGE = "РЕЗУЛЬТАТЫ ПОИСКА"
+    BOOK_PAGE = "СТАТЬЯ"
+    LIST_PAGE = "СПИСОК"
+    EXPERT_PAGE = "ЭКСПЕРТ"
 
     @classmethod
     def get(cls, raw_value):
@@ -50,10 +53,12 @@ class Key(NamedTuple):
 
 PALETTE = [
     Palette("frame", fore_high="#000", back_high="#fff"),
+    Palette("frame_bold", fore_high="bold,#000", back_high="#fff"),
     Palette("header", fore_high="#fff", back_high="#00f"),
     Palette("footer", fore_high="#fff", back_high="#00f"),
     Palette("highlighted", fore_high="#000", back_high="#ff0"),
     Palette("highlighted_header", fore_high="#fff", back_high="#f00"),
+    Palette("highlighted_bold", fore_high="bold,#000", back_high="#ff0"),
 ]
 
 
@@ -73,6 +78,27 @@ KEYS = [
         action="move_right",
         modes=Mode.tabs(),
         hidden=True,
+    ),
+    Key(
+        name="Enter",
+        buttons=["enter"],
+        action="open_book",
+        description="ОТКРЫТЬ",
+        modes={Mode.BOOKS_PAGE, Mode.LIST_PAGE, Mode.EXPERT_PAGE},
+    ),
+    Key(
+        name="Enter",
+        buttons=["enter"],
+        action="open_list",
+        description="ОТКРЫТЬ",
+        modes={Mode.LISTS_PAGE},
+    ),
+    Key(
+        name="Enter",
+        buttons=["enter"],
+        action="open_expert",
+        description="ОТКРЫТЬ",
+        modes={Mode.EXPERTS_PAGE},
     ),
     Key(
         name="Enter",

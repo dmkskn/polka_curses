@@ -3,8 +3,11 @@ import urwid
 from .views.books_page import BooksPage
 from .views.lists_page import ListsPage
 from .views.experts_page import ExpertsPage
+from .views.book_page import BookPage
+from .views.list_page import ListPage
+from .views.expert_page import ExpertPage
 from .views.search_page import SearchPage, SearchResultsPage
-from .views.tab_bar import TabBar
+from .views.tab_bar import TabBar, TitleHeader
 from .views.status_bar import StatusBar
 
 
@@ -52,7 +55,7 @@ class View(urwid.WidgetWrap):
         self.set_footer(StatusBar(lmsg, rmsg))
 
     def draw_experts(self, experts, lmsg="", rmsg=""):
-        """Replaces the body with a `ExpertsPage` object and the frame
+        """Replaces the body with an `ExpertsPage` object and the frame
         footer with a new `StatusBar` object."""
         self.set_body(ExpertsPage(experts))
         self.set_footer(StatusBar(lmsg, rmsg))
@@ -86,3 +89,40 @@ class View(urwid.WidgetWrap):
             self.header.set_tab(self.header.index + 1)
             self.footer.clear_left()
         return self.header.get_current_tab()
+
+    def get_focused_list(self):
+        return self.body.get_focused_list()
+
+    def get_focused_book(self):
+        return self.body.get_focused_book()
+
+    def get_focused_expert(self):
+        return self.body.get_focused_expert()
+
+    def get_focused_search_result(self):
+        return self.body.get_focused_result()
+
+    def draw_book(self, book, left_message="", right_message=""):
+        """Replaces the body with a `BookPage` object and
+        the frame footer with a new `StatusBar` object."""
+        self.set_body(BookPage(book))
+        self.set_footer(StatusBar(left_message, right_message))
+        self.set_header(TitleHeader.init_for_book(book))
+
+    def draw_list(self, list_, left_message="", right_message=""):
+        """Replaces the body with a `ListPage` object and
+        the frame footer with a new `StatusBar` object."""
+        self.set_body(ListPage(list_))
+        self.set_footer(StatusBar(left_message, right_message))
+        self.set_header(TitleHeader.init_for_list(list_))
+
+    def draw_expert(self, expert, left_message="", right_message=""):
+        """Replaces the body with an `ExpertPage` object and
+        the frame footer with a new `StatusBar` object."""
+        self.set_body(ExpertPage(expert))
+        self.set_footer(StatusBar(left_message, right_message))
+        self.set_header(TitleHeader.init_for_expert(expert))
+
+    def write_error_the_book_has_no_page(self, book):
+        text = f"Нет статьи на книгу «{book.title.upper()}»"
+        self.footer.set_left(text)

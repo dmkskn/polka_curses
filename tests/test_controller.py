@@ -11,6 +11,12 @@ from polka_curses.views.experts_page import ExpertsPage
 from polka_curses.views.search_page import SearchPage, SearchResultsPage
 
 from polka_curses.config import Mode, help_string_for
+from polka_curses.model import Model
+
+
+@pytest.fixture
+def model():
+    return Model()
 
 
 @pytest.fixture(scope="function")
@@ -86,3 +92,48 @@ def test_search_with_no_results(controller):
     assert controller.view.footer.left == "Нет результатов"
     assert controller.mode == Mode.SEARCH_PAGE
     assert controller.loop.draw_screen.called
+
+
+def test_open_book(controller, model):
+    book = model.books[0]
+    controller.view = MagicMock()
+    controller.view.get_focused_book = MagicMock(return_value=book)
+    controller.open_book()
+    assert controller.view.draw_book.called
+    assert controller.view.draw_book.call_args[0][0] == book
+    assert controller.mode == Mode.BOOK_PAGE
+
+
+def test_open_book_that_doesnt_have_article(controller, model):
+    books = [_ for _ in model.books if not _.has_article]
+    if not books:
+        return None
+    book = books[0]
+    controller.view = MagicMock()
+    controller.view.get_focused_book = MagicMock(return_value=book)
+    controller.open_book()
+    assert not controller.view.draw_book.called
+    assert controller.view.write_error_the_book_has_no_page.called
+    arg = controller.view.write_error_the_book_has_no_page.call_args[0][0]
+    assert arg == book
+    assert controller.mode == Mode.BOOKS_PAGE
+
+
+def test_open_list(controller, model):
+    l = model.lists[0]
+    controller.view = MagicMock()
+    controller.view.get_focused_list = MagicMock(return_value=l)
+    controller.open_list()
+    assert controller.view.draw_list.called
+    assert controller.view.draw_list.call_args[0][0] == l
+    assert controller.mode == Mode.LIST_PAGE
+
+
+def test_open_expert(controller, model):
+    expert = model.experts[0]
+    controller.view = MagicMock()
+    controller.view.get_focused_expert = MagicMock(return_value=expert)
+    controller.open_expert()
+    assert controller.view.draw_expert.called
+    assert controller.view.draw_expert.call_args[0][0] == expert
+    assert controller.mode == Mode.EXPERT_PAGE

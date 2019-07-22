@@ -44,3 +44,30 @@ class TabBar(urwid.WidgetWrap):
 
     def is_first_index(self):
         return self.index == 0
+
+
+class TitleHeader(urwid.WidgetWrap):
+    def __init__(self, text):
+        self.text = text
+        super().__init__(self.build())
+
+    def build(self):
+        text = urwid.Text(self.text, align=urwid.CENTER)
+        return urwid.AttrMap(text, "header")
+
+    @classmethod
+    def init_for_book(cls, book):
+        authors = ", ".join(book.authors) or None
+        authors = "(" + authors + ")" if authors else ""
+        authors = authors.upper()
+        title = book.title.upper()
+        return cls(f"{title} {authors}")
+
+    @classmethod
+    def init_for_list(cls, list_):
+        title = f"{list_.title.upper()} - {list_.short_description.upper()}"
+        return cls(title)
+
+    @classmethod
+    def init_for_expert(cls, expert):
+        return cls(expert.name.upper())

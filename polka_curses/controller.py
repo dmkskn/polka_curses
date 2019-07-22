@@ -88,3 +88,27 @@ class ViewController:
         self.mode = Mode.SEARCH_PAGE
         help_string = help_string_for(self.mode)
         self.view.draw_search(rmsg=help_string)
+
+    @update
+    def open_book(self):
+        book = self.view.get_focused_book()
+        if self.model.book_has_article(book):
+            self.mode = Mode.BOOK_PAGE
+            right_message = help_string_for(self.mode)
+            self.view.draw_book(book, right_message=right_message)
+        else:
+            self.view.write_error_the_book_has_no_page(book)
+
+    @update
+    def open_list(self):
+        self.mode = Mode.LIST_PAGE
+        list_ = self.view.get_focused_list()
+        right_message = help_string_for(self.mode)
+        self.view.draw_list(list_, right_message=right_message)
+
+    @update
+    def open_expert(self):
+        self.mode = Mode.EXPERT_PAGE
+        expert = self.view.get_focused_expert()
+        right_message = help_string_for(self.mode)
+        self.view.draw_expert(expert, right_message=right_message)

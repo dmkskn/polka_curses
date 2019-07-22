@@ -7,6 +7,9 @@ from polka_curses.views.books_page import BooksPage
 from polka_curses.views.lists_page import ListsPage
 from polka_curses.views.experts_page import ExpertsPage
 from polka_curses.views.search_page import SearchPage
+from polka_curses.views.book_page import BookPage
+from polka_curses.views.list_page import ListPage
+from polka_curses.views.expert_page import ExpertPage
 
 
 LEFT_MESSAGE = "left"
@@ -92,3 +95,30 @@ def test_focus_previous_tab(view):
         i = view.header.index
     view.focus_previous_tab()
     assert view.header.index == i - 1
+
+
+def test_draw_book(view, model):
+    view.draw_book(model.books[0], LEFT_MESSAGE, RIGHT_MESSAGE)
+    assert isinstance(view.body, BookPage)
+    assert view.footer.left == LEFT_MESSAGE
+    assert view.footer.right == RIGHT_MESSAGE
+
+
+def test_draw_list(view, model):
+    view.draw_list(model.lists[0], LEFT_MESSAGE, RIGHT_MESSAGE)
+    assert isinstance(view.body, ListPage)
+    assert view.footer.left == LEFT_MESSAGE
+    assert view.footer.right == RIGHT_MESSAGE
+
+
+def test_draw_expert(view, model):
+    view.draw_expert(model.experts[0], LEFT_MESSAGE, RIGHT_MESSAGE)
+    assert isinstance(view.body, ExpertPage)
+    assert view.footer.left == LEFT_MESSAGE
+    assert view.footer.right == RIGHT_MESSAGE
+
+
+def test_write_error_the_book_has_no_page(view, model):
+    book = model.books[0]
+    view.write_error_the_book_has_no_page(book)
+    assert view.footer.left == f"Нет статьи на книгу «{book.title.upper()}»"

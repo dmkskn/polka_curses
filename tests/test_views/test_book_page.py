@@ -1,17 +1,10 @@
 import pytest
 
 from polka_curses.views.book_page import BookPage, Questions, Question, Answer
-from polka_curses.model import Model
 
 
 @pytest.fixture
-def model():
-    return Model()
-
-
-@pytest.fixture
-def bookpage(model):
-    book = model.books[0]
+def bookpage(book):
     return BookPage(book)
 
 

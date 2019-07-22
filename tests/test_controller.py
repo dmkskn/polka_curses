@@ -11,15 +11,9 @@ from polka_curses.views.experts_page import ExpertsPage
 from polka_curses.views.search_page import SearchPage, SearchResultsPage
 
 from polka_curses.config import Mode, help_string_for
-from polka_curses.model import Model
 
 
-@pytest.fixture
-def model():
-    return Model()
-
-
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def controller():
     controller = ViewController()
     controller.loop = MagicMock()
@@ -94,8 +88,7 @@ def test_search_with_no_results(controller):
     assert controller.loop.draw_screen.called
 
 
-def test_open_book(controller, model):
-    book = model.books[0]
+def test_open_book(controller, book):
     controller.view = MagicMock()
     controller.view.get_focused_book = MagicMock(return_value=book)
     controller.open_book()
@@ -104,8 +97,8 @@ def test_open_book(controller, model):
     assert controller.mode == Mode.BOOK_PAGE
 
 
-def test_open_book_that_doesnt_have_article(controller, model):
-    books = [_ for _ in model.books if not _.has_article]
+def test_open_book_that_doesnt_have_article(controller, books):
+    books = [_ for _ in books if not _.has_article]
     if not books:
         return None
     book = books[0]
@@ -119,18 +112,16 @@ def test_open_book_that_doesnt_have_article(controller, model):
     assert controller.mode == Mode.BOOKS_PAGE
 
 
-def test_open_list(controller, model):
-    l = model.lists[0]
+def test_open_list(controller, list_):
     controller.view = MagicMock()
-    controller.view.get_focused_list = MagicMock(return_value=l)
+    controller.view.get_focused_list = MagicMock(return_value=list_)
     controller.open_list()
     assert controller.view.draw_list.called
-    assert controller.view.draw_list.call_args[0][0] == l
+    assert controller.view.draw_list.call_args[0][0] == list_
     assert controller.mode == Mode.LIST_PAGE
 
 
-def test_open_expert(controller, model):
-    expert = model.experts[0]
+def test_open_expert(controller, expert):
     controller.view = MagicMock()
     controller.view.get_focused_expert = MagicMock(return_value=expert)
     controller.open_expert()
@@ -153,7 +144,7 @@ def test_saves_last_mode(controller):
     assert controller.last_mode
 
 
-def test_open_previous(controller, model):
+def test_open_previous(controller):
     controller.view.draw_previous = MagicMock()
     controller.open_book()
     assert controller.mode == Mode.BOOK_PAGE
@@ -184,11 +175,7 @@ def test_open_in_browser(controller):
         assert controller.view.get_expert_article_url.called
 
 
-def test_open_search_result(controller, model):
-    book = model.books[0]
-    list_ = model.lists[0]
-    expert = model.experts[0]
-
+def test_open_search_result(controller, book, list_, expert):
     controller.view = MagicMock()
 
     controller.view.get_focused_search_result = MagicMock(return_value=book)

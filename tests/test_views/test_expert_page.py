@@ -1,36 +1,32 @@
 import pytest
 
 from polka_curses.views.expert_page import ExpertPage
-from polka_curses.model import Model
 
 
-model = Model()
-
-
-@pytest.fixture
-def expert_page_full():
+@pytest.fixture(scope="module")
+def expert_page_full(experts):
     """Has favorite books and wrote articles"""
-    experts = [e for e in model.experts if e.favorites and e.wrote_about]
+    experts = [e for e in experts if e.favorites and e.wrote_about]
     if experts:
         return ExpertPage(experts[0])
     else:
         return None
 
 
-@pytest.fixture
-def expert_page_favs():
+@pytest.fixture(scope="module")
+def expert_page_favs(experts):
     """Only favorite books. Wrote no articles."""
-    experts = [e for e in model.experts if e.favorites and not e.wrote_about]
+    experts = [e for e in experts if e.favorites and not e.wrote_about]
     if experts:
         return ExpertPage(experts[0])
     else:
         return None
 
 
-@pytest.fixture
-def expert_page_wrote():
+@pytest.fixture(scope="module")
+def expert_page_wrote(experts):
     """No favorite books. Wrote articles."""
-    experts = [e for e in model.experts if not e.favorites and e.wrote_about]
+    experts = [e for e in experts if not e.favorites and e.wrote_about]
     if experts:
         return ExpertPage(experts[0])
     else:
@@ -60,16 +56,16 @@ def test_get_focused_column_when_only_one(expert_page_favs, expert_page_wrote):
         assert e2.get_focused_column() is e2.wrote_about
 
 
-def test_get_focused_book_if_expert_is_full(expert_page_full):
+def test_get_focused_book_if_expert_is_full(expert_page_full, model):
     if expert_page_full:
         assert model.is_book(expert_page_full.get_focused_book())
 
 
-def test_get_focused_book_if_expert_has_only_favs(expert_page_favs):
+def test_get_focused_book_if_expert_has_only_favs(expert_page_favs, model):
     if expert_page_favs:
         assert model.is_book(expert_page_favs.get_focused_book())
 
 
-def test_get_focused_book_if_expert_only_wrote(expert_page_wrote):
+def test_get_focused_book_if_expert_only_wrote(expert_page_wrote, model):
     if expert_page_wrote:
         assert model.is_book(expert_page_wrote.get_focused_book())

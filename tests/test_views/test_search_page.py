@@ -1,5 +1,4 @@
 import pytest
-import polka
 
 from polka_curses.views.search_page import (
     SearchPage,
@@ -15,8 +14,8 @@ def search_page():
 
 
 @pytest.fixture
-def search_results_page():
-    return SearchResultsPage(polka.search("грибоедов"))
+def search_results_page(model):
+    return SearchResultsPage(model.search("грибоедов"))
 
 
 @pytest.fixture

@@ -1,17 +1,10 @@
 import pytest
 
 from polka_curses.views.list_page import ListPage, BookInListItem
-from polka_curses.model import Model
 
 
 @pytest.fixture
-def model():
-    return Model()
-
-
-@pytest.fixture
-def listpage(model):
-    list_ = model.lists[0]
+def listpage(list_):
     return ListPage(list_)
 
 

@@ -1,48 +1,5 @@
 import pytest
 import polka
-import random
-
-from polka_curses.model import Model
-
-
-BOOK_ID = 523
-LIST_ID = 85
-EXPERT_ID = 344
-
-
-@pytest.fixture
-def model():
-    return Model()
-
-
-@pytest.fixture
-def book():
-    return polka.Book(BOOK_ID)
-
-
-@pytest.fixture
-def not_book():
-    return random.choice([polka.Compilation(LIST_ID), polka.Pundit(EXPERT_ID)])
-
-
-@pytest.fixture
-def expert():
-    return polka.Pundit(EXPERT_ID)
-
-
-@pytest.fixture
-def not_expert():
-    return random.choice([polka.Compilation(LIST_ID), polka.Book(BOOK_ID)])
-
-
-@pytest.fixture
-def list_():
-    return polka.Compilation(LIST_ID)
-
-
-@pytest.fixture
-def not_list():
-    return random.choice([polka.Pundit(EXPERT_ID), polka.Book(BOOK_ID)])
 
 
 def test_get_books(model):

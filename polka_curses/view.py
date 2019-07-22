@@ -155,3 +155,12 @@ class View(urwid.WidgetWrap):
             self.footer.clear_left()
         if self.previous_headers:
             self.set_header(self.previous_headers.pop())
+
+    def get_book_article_url(self):
+        return self.body.book.url
+
+    def get_list_article_url(self):
+        return self.body.list_.url
+
+    def get_expert_article_url(self):
+        return self.body.expert.url

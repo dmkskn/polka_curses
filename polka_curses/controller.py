@@ -1,5 +1,6 @@
-from functools import wraps
+import webbrowser
 from collections import deque
+from functools import wraps
 
 import urwid
 
@@ -137,3 +138,12 @@ class ViewController:
         if mode:
             self.view.draw_previous()
             self.set_mode(mode)
+
+    def open_in_browser(self):
+        if self.mode == Mode.BOOK_PAGE:
+            url = self.view.get_book_article_url()
+        elif self.mode == Mode.LIST_PAGE:
+            url = self.view.get_list_article_url()
+        elif self.mode == Mode.EXPERT_PAGE:
+            url = self.view.get_expert_article_url()
+        webbrowser.open(url)

@@ -112,6 +112,13 @@ KEYS = [
         modes={Mode.SEARCH_PAGE},
     ),
     Key(
+        name="Tab",
+        buttons=["tab"],
+        action="open_in_browser",
+        description="ОТКРЫТЬ В БРАУЗЕРЕ",
+        modes=Mode.pages(),
+    ),
+    Key(
         name="Space",
         action="show_search",
         buttons=[" "],

@@ -1,7 +1,7 @@
 import pytest
 import urwid
 
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from polka_curses.controller import ViewController
 
@@ -142,14 +142,36 @@ def test_open_expert(controller, model):
 def test_saves_last_mode(controller):
     assert not controller.last_mode
     controller.view = MagicMock()
-    controller.open_expert()
+    controller.open_book()
     assert controller.last_mode
 
 
-def test_open_previous(controller):
+def test_open_previous(controller, model):
     controller.view.draw_previous = MagicMock()
     controller.open_book()
     assert controller.mode == Mode.BOOK_PAGE
     controller.open_previous()
     assert controller.view.draw_previous.called
     assert controller.mode != Mode.BOOK_PAGE
+
+
+def test_open_in_browser(controller):
+    controller.view = MagicMock()
+
+    controller.open_book()
+    with patch("webbrowser.open") as mock_webbrowser:
+        controller.open_in_browser()
+        assert mock_webbrowser.called
+        assert controller.view.get_book_article_url.called
+
+    controller.open_list()
+    with patch("webbrowser.open") as mock_webbrowser:
+        controller.open_in_browser()
+        assert mock_webbrowser.called
+        assert controller.view.get_list_article_url.called
+
+    controller.open_expert()
+    with patch("webbrowser.open") as mock_webbrowser:
+        controller.open_in_browser()
+        assert mock_webbrowser.called
+        assert controller.view.get_expert_article_url.called

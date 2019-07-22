@@ -1,6 +1,13 @@
 import urwid
 
 
+BOOK_BODY_TEMPLATE = """
+{authors}{sep}{years}
+
+{desc}
+"""
+
+
 class ListPage(urwid.ListBox):
     def __init__(self, list_):
         self.list_ = list_
@@ -28,13 +35,9 @@ class BookInListItem(urwid.WidgetWrap):
         authors = ", ".join(self.book.authors)
         sy, ey = self.book.year
         years = f"{sy or ''}{'-' if sy and ey else ''}{ey or ''}"
-        return urwid.Pile(
-            [
-                urwid.Text(f"{authors}{', ' if authors else ''}{years}"),
-                urwid.Divider(""),
-                urwid.Text(self.book.description),
-            ]
-        )
+        sep = ", " if authors else ""
+        desc = self.book.description
+        return urwid.Text(f"\n{authors}{sep}{years}\n\n{desc}")
 
     def selectable(self):
         return True

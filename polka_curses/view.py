@@ -1,3 +1,6 @@
+from functools import wraps
+from collections import deque
+
 import urwid
 
 from .views.books_page import BooksPage
@@ -11,6 +14,17 @@ from .views.tab_bar import TabBar, TitleHeader
 from .views.status_bar import StatusBar
 
 
+def save_previous(func):
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        self.previous_bodies.append(self.body)
+        self.previous_footers.append(self.footer)
+        self.previous_headers.append(self.header)
+        return func(self, *args, **kwargs)
+
+    return wrapper
+
+
 class View(urwid.WidgetWrap):
     """It is intended for managing the UI views."""
 
@@ -19,6 +33,9 @@ class View(urwid.WidgetWrap):
         tabbar = TabBar(0)
         statusbar = StatusBar(lmsg, rmsg)
         self.frame = urwid.Frame(books, tabbar, statusbar)
+        self.previous_headers = deque()
+        self.previous_bodies = deque()
+        self.previous_footers = deque()
         super().__init__(urwid.AttrMap(self.frame, "frame"))
 
     @property
@@ -102,6 +119,7 @@ class View(urwid.WidgetWrap):
     def get_focused_search_result(self):
         return self.body.get_focused_result()
 
+    @save_previous
     def draw_book(self, book, left_message="", right_message=""):
         """Replaces the body with a `BookPage` object and
         the frame footer with a new `StatusBar` object."""
@@ -109,6 +127,7 @@ class View(urwid.WidgetWrap):
         self.set_footer(StatusBar(left_message, right_message))
         self.set_header(TitleHeader.init_for_book(book))
 
+    @save_previous
     def draw_list(self, list_, left_message="", right_message=""):
         """Replaces the body with a `ListPage` object and
         the frame footer with a new `StatusBar` object."""
@@ -116,6 +135,7 @@ class View(urwid.WidgetWrap):
         self.set_footer(StatusBar(left_message, right_message))
         self.set_header(TitleHeader.init_for_list(list_))
 
+    @save_previous
     def draw_expert(self, expert, left_message="", right_message=""):
         """Replaces the body with an `ExpertPage` object and
         the frame footer with a new `StatusBar` object."""
@@ -126,3 +146,12 @@ class View(urwid.WidgetWrap):
     def write_error_the_book_has_no_page(self, book):
         text = f"Нет статьи на книгу «{book.title.upper()}»"
         self.footer.set_left(text)
+
+    def draw_previous(self):
+        if self.previous_bodies:
+            self.set_body(self.previous_bodies.pop())
+        if self.previous_footers:
+            self.set_footer(self.previous_footers.pop())
+            self.footer.clear_left()
+        if self.previous_headers:
+            self.set_header(self.previous_headers.pop())

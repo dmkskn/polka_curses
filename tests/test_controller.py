@@ -137,3 +137,19 @@ def test_open_expert(controller, model):
     assert controller.view.draw_expert.called
     assert controller.view.draw_expert.call_args[0][0] == expert
     assert controller.mode == Mode.EXPERT_PAGE
+
+
+def test_saves_last_mode(controller):
+    assert not controller.last_mode
+    controller.view = MagicMock()
+    controller.open_expert()
+    assert controller.last_mode
+
+
+def test_open_previous(controller):
+    controller.view.draw_previous = MagicMock()
+    controller.open_book()
+    assert controller.mode == Mode.BOOK_PAGE
+    controller.open_previous()
+    assert controller.view.draw_previous.called
+    assert controller.mode != Mode.BOOK_PAGE

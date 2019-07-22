@@ -21,6 +21,10 @@ class Mode(Enum):
                 return mode
 
     @classmethod
+    def pages(cls):
+        return {cls.BOOK_PAGE, cls.LIST_PAGE, cls.EXPERT_PAGE}
+
+    @classmethod
     def tabs(cls):
         return {
             cls.BOOKS_PAGE,
@@ -113,6 +117,13 @@ KEYS = [
         buttons=[" "],
         description="НОВЫЙ ПОИСК",
         modes={Mode.SEARCH_RESULTS_PAGE},
+    ),
+    Key(
+        name="Esc",
+        buttons=["esc"],
+        action="open_previous",
+        description="ЗАКРЫТЬ",
+        modes=Mode.pages(),
     ),
     Key(
         name="Esc",

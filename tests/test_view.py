@@ -122,3 +122,26 @@ def test_write_error_the_book_has_no_page(view, model):
     book = model.books[0]
     view.write_error_the_book_has_no_page(book)
     assert view.footer.left == f"Нет статьи на книгу «{book.title.upper()}»"
+
+
+def test_saves_previous(view, model):
+    book = model.books[0]
+    view.draw_book(book)
+    assert view.previous_bodies
+    assert view.previous_footers
+    assert view.previous_headers
+
+
+def test_draw_previous(view, model):
+    body = view.body
+    header = view.header
+    footer = view.footer
+    book = model.books[0]
+    view.draw_book(book)
+    assert body != view.body
+    assert header != view.header
+    assert footer != view.footer
+    view.draw_previous()
+    assert body == view.body
+    assert header == view.header
+    assert footer == view.footer

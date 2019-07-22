@@ -1,4 +1,5 @@
 from functools import wraps
+from collections import deque
 
 import urwid
 
@@ -25,6 +26,7 @@ class ViewController:
 
     def __init__(self):
         self.mode = Mode.BOOKS_PAGE
+        self.last_mode = deque()
         self.model = Model()
         self.view = View(self.model.books, rmsg=help_string_for(self.mode))
         self.input_handler = InputHandler(self)
@@ -42,6 +44,17 @@ class ViewController:
     def exit(self):
         """Stop the main loop."""
         raise urwid.ExitMainLoop()
+
+    def set_mode(self, mode, save_last=False):
+        if save_last:
+            self.last_mode.append(self.mode)
+        self.mode = mode
+
+    def get_mode(self):
+        return self.mode
+
+    def get_last_mode(self):
+        return self.last_mode.pop() if self.last_mode else None
 
     def move_right(self):
         """Go to the next tab on the right."""
@@ -65,7 +78,7 @@ class ViewController:
             self.view.draw_experts(self.model.experts, rmsg=help_string)
         else:
             self.view.draw_search(rmsg=help_string)
-        self.mode = mode
+        self.set_mode(mode, save_last=True)
 
     @update
     def show_search_results(self):
@@ -74,41 +87,53 @@ class ViewController:
         query = self.view.get_search_query()
         results = self.model.search(query)
         if results:
-            self.mode = Mode.SEARCH_RESULTS_PAGE
-            help_string = help_string_for(self.mode)
+            mode = Mode.SEARCH_RESULTS_PAGE
+            help_string = help_string_for(mode)
             self.view.show_search_results(results, rmsg=help_string)
         else:
-            self.mode = Mode.SEARCH_PAGE
-            help_string = help_string_for(self.mode)
+            mode = Mode.SEARCH_PAGE
+            help_string = help_string_for(mode)
             self.view.draw_search("Нет результатов", help_string)
+        self.set_mode(mode, save_last=True)
 
     @update
     def show_search(self):
         """Show search page."""
-        self.mode = Mode.SEARCH_PAGE
-        help_string = help_string_for(self.mode)
+        mode = Mode.SEARCH_PAGE
+        help_string = help_string_for(mode)
         self.view.draw_search(rmsg=help_string)
+        self.set_mode(mode, save_last=True)
 
     @update
     def open_book(self):
         book = self.view.get_focused_book()
         if self.model.book_has_article(book):
-            self.mode = Mode.BOOK_PAGE
-            right_message = help_string_for(self.mode)
+            mode = Mode.BOOK_PAGE
+            right_message = help_string_for(mode)
             self.view.draw_book(book, right_message=right_message)
+            self.set_mode(mode, save_last=True)
         else:
             self.view.write_error_the_book_has_no_page(book)
 
     @update
     def open_list(self):
-        self.mode = Mode.LIST_PAGE
+        mode = Mode.LIST_PAGE
         list_ = self.view.get_focused_list()
-        right_message = help_string_for(self.mode)
+        right_message = help_string_for(mode)
         self.view.draw_list(list_, right_message=right_message)
+        self.set_mode(mode, save_last=True)
 
     @update
     def open_expert(self):
-        self.mode = Mode.EXPERT_PAGE
+        mode = Mode.EXPERT_PAGE
         expert = self.view.get_focused_expert()
-        right_message = help_string_for(self.mode)
+        right_message = help_string_for(mode)
         self.view.draw_expert(expert, right_message=right_message)
+        self.set_mode(mode, save_last=True)
+
+    @update
+    def open_previous(self):
+        mode = self.get_last_mode()
+        if mode:
+            self.view.draw_previous()
+            self.set_mode(mode)

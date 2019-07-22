@@ -7,7 +7,7 @@ from polka_curses.views.book_page import BookPage
 from polka_curses.views.books_page import BooksPage
 from polka_curses.views.expert_page import ExpertPage
 from polka_curses.views.experts_page import ExpertsPage
-from polka_curses.views.list_page import ListPage
+from polka_curses.views.list_page import ListPage, ListDescription
 from polka_curses.views.lists_page import ListsPage
 from polka_curses.views.search_page import SearchPage, SearchResultItem
 
@@ -67,6 +67,21 @@ def test_draw_search(view):
     assert isinstance(view.body, SearchPage)
     assert view.footer.left == LEFT_MESSAGE
     assert view.footer.right == RIGHT_MESSAGE
+
+
+def test_draw_list_description(view, model):
+    view.draw_lists(model.lists)
+    view.draw_list(view.get_focused_list())
+    view.draw_list_description(LEFT_MESSAGE, RIGHT_MESSAGE)
+    assert isinstance(view.body, ListDescription)
+    assert view.footer.left == LEFT_MESSAGE
+    assert view.footer.right == RIGHT_MESSAGE
+
+
+def test_draw_list_description_not_in_list_page(view, model):
+    view.draw_books(model.books)
+    with pytest.raises(ViewError):
+        view.draw_list_description()
 
 
 def test_get_search_query(view):

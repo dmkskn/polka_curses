@@ -7,7 +7,7 @@ from .views.books_page import BooksPage
 from .views.lists_page import ListsPage
 from .views.experts_page import ExpertsPage
 from .views.book_page import BookPage
-from .views.list_page import ListPage
+from .views.list_page import ListPage, ListDescription
 from .views.expert_page import ExpertPage
 from .views.search_page import SearchPage, SearchResultsPage
 from .views.tab_bar import TabBar, TitleHeader
@@ -152,28 +152,34 @@ class View(urwid.WidgetWrap):
         return self.body.get_focused_result()
 
     @save_previous
-    def draw_book(self, book, left_message="", right_message=""):
+    def draw_book(self, book, lmsg="", rmsg=""):
         """Replaces the body with a `BookPage` object and
         the frame footer with a new `StatusBar` object."""
         self.set_body(BookPage(book))
-        self.set_footer(StatusBar(left_message, right_message))
+        self.set_footer(StatusBar(lmsg, rmsg))
         self.set_header(TitleHeader.init_for_book(book))
 
     @save_previous
-    def draw_list(self, list_, left_message="", right_message=""):
+    def draw_list(self, list_, lmsg="", rmsg=""):
         """Replaces the body with a `ListPage` object and
         the frame footer with a new `StatusBar` object."""
         self.set_body(ListPage(list_))
-        self.set_footer(StatusBar(left_message, right_message))
+        self.set_footer(StatusBar(lmsg, rmsg))
         self.set_header(TitleHeader.init_for_list(list_))
 
     @save_previous
-    def draw_expert(self, expert, left_message="", right_message=""):
+    def draw_expert(self, expert, lmsg="", rmsg=""):
         """Replaces the body with an `ExpertPage` object and
         the frame footer with a new `StatusBar` object."""
         self.set_body(ExpertPage(expert))
-        self.set_footer(StatusBar(left_message, right_message))
+        self.set_footer(StatusBar(lmsg, rmsg))
         self.set_header(TitleHeader.init_for_expert(expert))
+
+    @save_previous
+    @in_pages(ListPage)
+    def draw_list_description(self, lmsg="", rmsg=""):
+        self.set_body(ListDescription(self.body.list_, bg=self.body))
+        self.set_footer(StatusBar(lmsg, rmsg))
 
     def write_error_the_book_has_no_page(self, book):
         text = f"Нет статьи на книгу «{book.title.upper()}»"

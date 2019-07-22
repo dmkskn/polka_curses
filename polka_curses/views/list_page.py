@@ -1,11 +1,7 @@
 import urwid
+from urwid import CENTER, MIDDLE
 
-
-BOOK_BODY_TEMPLATE = """
-{authors}{sep}{years}
-
-{desc}
-"""
+from .widgets.scrollable_text import ScrollableText
 
 
 class ListPage(urwid.ListBox):
@@ -41,3 +37,16 @@ class BookInListItem(urwid.WidgetWrap):
 
     def selectable(self):
         return True
+
+
+class ListDescription(urwid.WidgetWrap):
+    def __init__(self, list_, bg, **kwargs):
+        self.list_ = list_
+        self.bg = bg
+        super().__init__(self.build())
+
+    def build(self):
+        w = ScrollableText(self.list_.description)
+        w = urwid.Padding(w, left=2, right=2, align=CENTER)
+        w = urwid.LineBox(w, "📜", CENTER)
+        return urwid.Overlay(w, self.bg, CENTER, 65, MIDDLE, 15)

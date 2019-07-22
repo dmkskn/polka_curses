@@ -13,6 +13,7 @@ class Mode(Enum):
     BOOK_PAGE = "СТАТЬЯ"
     LIST_PAGE = "СПИСОК"
     EXPERT_PAGE = "ЭКСПЕРТ"
+    LIST_DESCRIPTION_PAGE = "ИНФОРМАЦИЯ О СПИСКЕ"
 
     @classmethod
     def get(cls, raw_value):
@@ -82,6 +83,20 @@ KEYS = [
         action="move_right",
         modes=Mode.tabs(),
         hidden=True,
+    ),
+    Key(
+        name="Space",
+        buttons=[" "],
+        action="show_list_description",
+        description="ОПИСАНИЕ",
+        modes={Mode.LIST_PAGE},
+    ),
+    Key(
+        name="Space",
+        buttons=[" "],
+        action="open_previous",
+        description="ЗАКРЫТЬ",
+        modes={Mode.LIST_DESCRIPTION_PAGE},
     ),
     Key(
         name="Enter",

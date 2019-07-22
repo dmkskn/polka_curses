@@ -110,8 +110,8 @@ class ViewController:
         book = self.view.get_focused_book()
         if self.model.book_has_article(book):
             mode = Mode.BOOK_PAGE
-            right_message = help_string_for(mode)
-            self.view.draw_book(book, right_message=right_message)
+            rmsg = help_string_for(mode)
+            self.view.draw_book(book, rmsg=rmsg)
             self.set_mode(mode, save_last=True)
         else:
             self.view.write_error_the_book_has_no_page(book)
@@ -120,16 +120,23 @@ class ViewController:
     def open_list(self):
         mode = Mode.LIST_PAGE
         list_ = self.view.get_focused_list()
-        right_message = help_string_for(mode)
-        self.view.draw_list(list_, right_message=right_message)
+        rmsg = help_string_for(mode)
+        self.view.draw_list(list_, rmsg=rmsg)
         self.set_mode(mode, save_last=True)
 
     @update
     def open_expert(self):
         mode = Mode.EXPERT_PAGE
         expert = self.view.get_focused_expert()
-        right_message = help_string_for(mode)
-        self.view.draw_expert(expert, right_message=right_message)
+        rmsg = help_string_for(mode)
+        self.view.draw_expert(expert, rmsg=rmsg)
+        self.set_mode(mode, save_last=True)
+
+    @update
+    def show_list_description(self):
+        mode = Mode.LIST_DESCRIPTION_PAGE
+        rmsg = help_string_for(mode)
+        self.view.draw_list_description(rmsg=rmsg)
         self.set_mode(mode, save_last=True)
 
     @update

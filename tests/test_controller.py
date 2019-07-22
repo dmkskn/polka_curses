@@ -139,6 +139,13 @@ def test_open_expert(controller, model):
     assert controller.mode == Mode.EXPERT_PAGE
 
 
+def test_open_list_description(controller):
+    controller.view = MagicMock()
+    controller.show_list_description()
+    assert controller.view.draw_list_description.called
+    assert controller.mode == Mode.LIST_DESCRIPTION_PAGE
+
+
 def test_saves_last_mode(controller):
     assert not controller.last_mode
     controller.view = MagicMock()

@@ -1,7 +1,7 @@
 import pytest
 import polka_curses.config as config
-from polka_curses.config import Key, Mode, Palette
-
+from polka_curses.config import Key, Mode, Palette, KEYS
+from polka_curses.controller import ViewController
 
 TEST_HELP_STRING_FOR_BOOKS_PAGE = "ОТКРЫТЬ (Enter), ВЫХОД (Esc)"
 
@@ -56,3 +56,10 @@ def test_help_for_mode(monkeypatch, TEST_KEYS):
     monkeypatch.setattr(config, "KEYS", TEST_KEYS)
     result = config.help_string_for(Mode.BOOKS_PAGE)
     assert result == TEST_HELP_STRING_FOR_BOOKS_PAGE
+
+
+def test_keys_actions_exists():
+    actions = [k.action for k in KEYS]
+    controller = ViewController()
+    for action in actions:
+        assert action in dir(controller)

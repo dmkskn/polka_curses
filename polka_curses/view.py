@@ -25,6 +25,31 @@ def save_previous(func):
     return wrapper
 
 
+def in_pages(*pages):
+    """A decorator for View's methods. If a method was called and the
+    current body class is not in `pages` the decorator raises an error.
+    Use it only if specific objects are expected inside the method."""
+
+    def inner(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            if not isinstance(self.body, tuple(pages)):
+                raise ViewError.wrong_body(self.body, pages)
+            return func(self, *args, **kwargs)
+
+        return wrapper
+
+    return inner
+
+
+class ViewError(Exception):
+    @classmethod
+    def wrong_body(cls, got, expected):
+        got = got.__class__.__name__
+        expected = [e.__name__ for e in expected]
+        return cls(f"Wrong body object: {got}. Expected: {expected}")
+
+
 class View(urwid.WidgetWrap):
     """It is intended for managing the UI views."""
 
@@ -89,10 +114,12 @@ class View(urwid.WidgetWrap):
         self.set_body(SearchResultsPage(results))
         self.set_footer(StatusBar(lmsg, rmsg))
 
+    @in_pages(SearchPage)
     def get_search_query(self):
         """Returns the search query from a `SearchResultsPage` object"""
         return self.body.get_search_query()
 
+    @in_pages(BooksPage, ListsPage, ExpertsPage, SearchPage)
     def focus_previous_tab(self):
         """Focuses the previous tab in the header."""
         if not self.header.is_first_index():
@@ -100,6 +127,7 @@ class View(urwid.WidgetWrap):
             self.footer.clear_left()
         return self.header.get_current_tab()
 
+    @in_pages(BooksPage, ListsPage, ExpertsPage, SearchPage)
     def focus_next_tab(self):
         """Focuses the next tab in the header."""
         if not self.header.is_last_index():
@@ -107,15 +135,19 @@ class View(urwid.WidgetWrap):
             self.footer.clear_left()
         return self.header.get_current_tab()
 
+    @in_pages(ListsPage)
     def get_focused_list(self):
         return self.body.get_focused_list()
 
+    @in_pages(BooksPage, ListPage, ExpertPage)
     def get_focused_book(self):
         return self.body.get_focused_book()
 
+    @in_pages(ExpertsPage)
     def get_focused_expert(self):
         return self.body.get_focused_expert()
 
+    @in_pages(SearchResultsPage)
     def get_focused_search_result(self):
         return self.body.get_focused_result()
 
@@ -156,11 +188,14 @@ class View(urwid.WidgetWrap):
         if self.previous_headers:
             self.set_header(self.previous_headers.pop())
 
+    @in_pages(BookPage)
     def get_book_article_url(self):
         return self.body.book.url
 
+    @in_pages(ListPage)
     def get_list_article_url(self):
         return self.body.list_.url
 
+    @in_pages(ExpertPage)
     def get_expert_article_url(self):
         return self.body.expert.url

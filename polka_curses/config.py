@@ -134,6 +134,13 @@ KEYS = [
         modes=Mode.pages(),
     ),
     Key(
+        name="Enter",
+        buttons=["enter"],
+        action="open_search_result",
+        description="ОТКРЫТЬ",
+        modes={Mode.SEARCH_RESULTS_PAGE},
+    ),
+    Key(
         name="Space",
         action="show_search",
         buttons=[" "],

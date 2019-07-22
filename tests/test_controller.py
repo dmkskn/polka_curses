@@ -182,3 +182,26 @@ def test_open_in_browser(controller):
         controller.open_in_browser()
         assert mock_webbrowser.called
         assert controller.view.get_expert_article_url.called
+
+
+def test_open_search_result(controller, model):
+    book = model.books[0]
+    list_ = model.lists[0]
+    expert = model.experts[0]
+
+    controller.view = MagicMock()
+
+    controller.view.get_focused_search_result = MagicMock(return_value=book)
+    controller.open_search_result()
+    assert controller.view.draw_book.call_args[0][0] == book
+    assert controller.mode == Mode.BOOK_PAGE
+
+    controller.view.get_focused_search_result = MagicMock(return_value=list_)
+    controller.open_search_result()
+    assert controller.view.draw_list.call_args[0][0] == list_
+    assert controller.mode == Mode.LIST_PAGE
+
+    controller.view.get_focused_search_result = MagicMock(return_value=expert)
+    controller.open_search_result()
+    assert controller.view.draw_expert.call_args[0][0] == expert
+    assert controller.mode == Mode.EXPERT_PAGE

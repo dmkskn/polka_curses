@@ -106,6 +106,27 @@ class ViewController:
         self.set_mode(mode, save_last=True)
 
     @update
+    def open_search_result(self):
+        result = self.view.get_focused_search_result()
+        if self.model.is_book(result):
+            if result.has_article:
+                mode = Mode.BOOK_PAGE
+                rmsg = help_string_for(mode)
+                self.view.draw_book(result, rmsg=rmsg)
+            else:
+                self.view.write_error_the_book_has_no_page(result)
+                return None
+        elif self.model.is_list(result):
+            mode = Mode.LIST_PAGE
+            rmsg = help_string_for(mode)
+            self.view.draw_list(result, rmsg=rmsg)
+        else:
+            mode = Mode.EXPERT_PAGE
+            rmsg = help_string_for(mode)
+            self.view.draw_expert(result, rmsg=rmsg)
+        self.set_mode(mode, save_last=True)
+
+    @update
     def open_book(self):
         book = self.view.get_focused_book()
         if self.model.book_has_article(book):

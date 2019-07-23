@@ -1,3 +1,5 @@
+from builtins import property
+
 import urwid
 
 from polka_curses.views.widgets.scrollable_text import ScrollableText
@@ -13,15 +15,25 @@ class BookPage(urwid.WidgetWrap):
         return [Question(q, a) for q, a, _ in self.book.questions]
 
     def build(self):
-        self.answer_column = Answer("")
-        self.questions_column = Questions(self.questions, self.answer_column)
+        lcol = urwid.LineBox(Questions(self.questions, self.change_answer))
+        rcol = Answer("")
+        self.cols = urwid.Columns([(35, lcol), rcol], focus_column=0)
         self.questions_column.update_answer()
+        return self.cols
 
-        lcol = urwid.LineBox(self.questions_column)
-        rcol = urwid.Padding(self.answer_column, left=1, right=1)
-        rcol = urwid.LineBox(rcol)
+    def change_answer(self, answer):
+        options = self.cols.contents[1][1]
+        answer = urwid.LineBox(urwid.Padding(Answer(answer), left=1, right=1))
+        answer = urwid.AttrMap(answer, "frame", "highlighted")
+        self.cols.contents[1] = (answer, options)
 
-        return urwid.Columns([(35, lcol), rcol], focus_column=0)
+    @property
+    def questions_column(self):
+        return self.cols.contents[0][0].base_widget
+
+    @property
+    def answer_column(self):
+        return self.cols.contents[1][0].base_widget
 
 
 class Question(urwid.WidgetWrap):
@@ -50,9 +62,9 @@ class Question(urwid.WidgetWrap):
 
 
 class Questions(urwid.ListBox):
-    def __init__(self, questions, answer_column):
+    def __init__(self, questions, func_for_changing_answer):
         self.questions = questions
-        self.answer_column = answer_column
+        self.change_answer = func_for_changing_answer
         super().__init__(urwid.SimpleFocusListWalker(self.questions))
 
     def change_focus(self, *args, **kwargs):
@@ -60,7 +72,7 @@ class Questions(urwid.ListBox):
         self.update_answer()
 
     def update_answer(self):
-        self.answer_column.set_text(self.focus.answer)
+        self.change_answer(self.focus.answer)
 
 
 class Answer(ScrollableText):

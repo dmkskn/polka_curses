@@ -24,10 +24,3 @@ def test_left_column_is_questions(bookpage):
 
 def test_right_column_is_answer(bookpage):
     assert isinstance(bookpage.answer_column.base_widget, Answer)
-
-
-def test_right_column_contains_answer_on_focused_question(bookpage):
-    questions = bookpage.questions_column.base_widget
-    answer = bookpage.answer_column.base_widget
-    question = questions.focus
-    assert question.answer == answer.text

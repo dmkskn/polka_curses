@@ -1,13 +1,13 @@
 import pytest
 import polka_curses.config as config
-from polka_curses.config import Key, Mode, Palette, KEYS
+from polka_curses.config import Key, Mode, PaletteItem, KEYS
 from polka_curses.controller import ViewController
 
 TEST_HELP_STRING_FOR_BOOKS_PAGE = "ОТКРЫТЬ (Enter), ВЫХОД (Esc)"
 
 
-def test_palette_is_tuple():
-    assert issubclass(Palette, tuple)
+def test_palette_item_is_tuple():
+    assert issubclass(PaletteItem, tuple)
 
 
 def test_key_is_tuple():

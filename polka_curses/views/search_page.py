@@ -1,9 +1,11 @@
 import urwid
-from urwid import CENTER, TOP
+from urwid import CENTER, RELATIVE, TOP, LEFT
+
+from polka_curses.config import Palette as p
 
 
-RELATIVE_55 = ("relative", 55)
-RELATIVE_90 = ("relative", 90)
+RELATIVE_55 = (RELATIVE, 55)
+RELATIVE_90 = (RELATIVE, 90)
 
 
 class SearchResultsExseption(Exception):
@@ -52,8 +54,8 @@ class SearchResultItem(urwid.WidgetWrap):
         self.result = result
         body = urwid.Text(self.body)
         body = urwid.Padding(body, left=1, right=1)
-        item = urwid.LineBox(body, self.header, urwid.LEFT)
-        super().__init__(urwid.AttrMap(item, "frame", "highlighted"))
+        item = urwid.LineBox(body, self.header, LEFT)
+        super().__init__(urwid.AttrMap(item, p.frame.name, p.frame_focus.name))
 
     @property
     def header(self):

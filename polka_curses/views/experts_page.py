@@ -1,4 +1,7 @@
 import urwid
+from urwid import LEFT
+
+from polka_curses.config import Palette as p
 
 
 class ExpertsPage(urwid.ListBox):
@@ -17,8 +20,8 @@ class ExpertItem(urwid.WidgetWrap):
         self.expert = expert
         body = urwid.Text(self.body)
         body = urwid.Padding(body, left=1, right=1)
-        item = urwid.LineBox(body, self.header, urwid.LEFT)
-        super().__init__(urwid.AttrMap(item, "frame", "highlighted"))
+        item = urwid.LineBox(body, self.header, LEFT)
+        super().__init__(urwid.AttrMap(item, p.frame.name, p.frame_focus.name))
 
     @property
     def header(self):

@@ -1,4 +1,5 @@
 import urwid
+from urwid import PACK
 
 from .books_page import BooksPage
 
@@ -25,7 +26,7 @@ class ExpertPage(urwid.WidgetWrap):
             self.container = wrote_about
         else:
             self.container = urwid.Filler(urwid.Text(""))
-        return urwid.Pile([("pack", self.description), self.container])
+        return urwid.Pile([(PACK, self.description), self.container])
 
     def build_favorites(self):
         if self.expert.favorites:

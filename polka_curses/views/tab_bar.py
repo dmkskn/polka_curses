@@ -1,4 +1,7 @@
 import urwid
+from urwid import CENTER
+
+from polka_curses.config import Palette as p
 
 
 class TabBar(urwid.WidgetWrap):
@@ -10,9 +13,9 @@ class TabBar(urwid.WidgetWrap):
 
     def _build(self):
         text = self.tabs
-        text[self.i] = ("highlighted_header", text[self.i])
-        text = urwid.Text(text, align=urwid.CENTER)
-        return urwid.AttrMap(text, "header")
+        text[self.i] = (p.header_focus.name, text[self.i])
+        text = urwid.Text(text, align=CENTER)
+        return urwid.AttrMap(text, p.header.name)
 
     def update(self):
         self._w = self._build()
@@ -52,8 +55,8 @@ class TitleHeader(urwid.WidgetWrap):
         super().__init__(self.build())
 
     def build(self):
-        text = urwid.Text(self.text, align=urwid.CENTER)
-        return urwid.AttrMap(text, "header")
+        text = urwid.Text(self.text, align=CENTER)
+        return urwid.AttrMap(text, p.header.name)
 
     @classmethod
     def init_for_book(cls, book):

@@ -1,5 +1,7 @@
 import urwid
-from urwid import CENTER, MIDDLE
+from urwid import CENTER, LEFT, MIDDLE
+
+from polka_curses.config import Palette as p
 
 from .widgets.scrollable_text import ScrollableText
 
@@ -19,8 +21,8 @@ class BookInListItem(urwid.WidgetWrap):
     def __init__(self, book):
         self.book = book
         body = urwid.Padding(self.body, left=1, right=1)
-        item = urwid.LineBox(body, self.header, urwid.LEFT)
-        super().__init__(urwid.AttrMap(item, "frame", "highlighted"))
+        item = urwid.LineBox(body, self.header, LEFT)
+        super().__init__(urwid.AttrMap(item, p.frame.name, p.frame_focus.name))
 
     @property
     def header(self):

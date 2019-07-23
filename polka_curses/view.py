@@ -12,6 +12,7 @@ from .views.expert_page import ExpertPage
 from .views.search_page import SearchPage, SearchResultsPage
 from .views.tab_bar import TabBar, TitleHeader
 from .views.status_bar import StatusBar
+from .config import Palette as p
 
 
 def save_previous(func):
@@ -61,7 +62,7 @@ class View(urwid.WidgetWrap):
         self.previous_headers = deque()
         self.previous_bodies = deque()
         self.previous_footers = deque()
-        super().__init__(urwid.AttrMap(self.frame, "frame"))
+        super().__init__(urwid.AttrMap(self.frame, p.frame.name))
 
     @property
     def header(self):

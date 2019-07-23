@@ -4,7 +4,7 @@ from functools import wraps
 
 import urwid
 
-from .config import PALETTE, Mode, help_string_for
+from .config import Palette, Mode, help_string_for
 from .handler import InputHandler
 from .model import Model
 from .view import View
@@ -39,7 +39,7 @@ class ViewController:
         self.loop.unhandled_input = self.input_handler.handle
         self.loop.screen.reset_default_terminal_palette()
         self.loop.screen.set_terminal_properties(256, False)
-        self.loop.screen.register_palette(PALETTE)
+        self.loop.screen.register_palette(Palette.as_list())
         self.loop.run()
 
     def exit(self):

@@ -3,6 +3,7 @@ from builtins import property
 import urwid
 
 from polka_curses.views.widgets.scrollable_text import ScrollableText
+from polka_curses.config import Palette as p
 
 
 class BookPage(urwid.WidgetWrap):
@@ -24,7 +25,7 @@ class BookPage(urwid.WidgetWrap):
     def change_answer(self, answer):
         options = self.cols.contents[1][1]
         answer = urwid.LineBox(urwid.Padding(Answer(answer), left=1, right=1))
-        answer = urwid.AttrMap(answer, "frame", "highlighted")
+        answer = urwid.AttrMap(answer, p.frame.name, p.frame_focus.name)
         self.cols.contents[1] = (answer, options)
 
     @property
@@ -55,7 +56,7 @@ class Question(urwid.WidgetWrap):
         }
         w = urwid.Text(self.question.upper())
         w = urwid.LineBox(w, **borders)
-        return urwid.AttrMap(w, "frame_bold", "highlighted_bold")
+        return urwid.AttrMap(w, p.frame_bold.name, p.frame_bold_focus.name)
 
     def selectable(self):
         return True

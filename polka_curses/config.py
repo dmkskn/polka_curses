@@ -36,13 +36,39 @@ class Mode(Enum):
         }
 
 
-class Palette(NamedTuple):
+WHITE = "#fff"
+BLACK = "#000"
+BLUE = "#00f"
+YELLOW = "#ff0"
+RED = "#f00"
+BOLD = "bold"
+
+
+class PaletteItem(NamedTuple):
     name: str
     fore: str = ""
     back: str = ""
     mono: str = ""
     fore_high: str = ""
     back_high: str = ""
+
+
+class Palette(Enum):
+    header = PaletteItem("header", fore_high=WHITE, back_high=BLUE)
+    header_focus = PaletteItem("header_focus", fore_high=WHITE, back_high=RED)
+    footer = PaletteItem("footer", fore_high=WHITE, back_high=BLUE)
+    frame = PaletteItem("frame", fore_high=BLACK, back_high=WHITE)
+    frame_focus = PaletteItem("frame_focus", fore_high=BLACK, back_high=YELLOW)
+    frame_bold = PaletteItem(
+        "frame_bold", fore_high=f"{BOLD},{BLACK}", back_high=WHITE
+    )
+    frame_bold_focus = PaletteItem(
+        "frame_bold_focus", fore_high=f"{BOLD},{BLACK}", back_high=YELLOW
+    )
+
+    @classmethod
+    def as_list(cls):
+        return [p.value for p in cls]
 
 
 class Key(NamedTuple):
@@ -54,17 +80,6 @@ class Key(NamedTuple):
     action: str
     modes: Set[Mode]
     hidden: bool = False
-
-
-PALETTE = [
-    Palette("frame", fore_high="#000", back_high="#fff"),
-    Palette("frame_bold", fore_high="bold,#000", back_high="#fff"),
-    Palette("header", fore_high="#fff", back_high="#00f"),
-    Palette("footer", fore_high="#fff", back_high="#00f"),
-    Palette("highlighted", fore_high="#000", back_high="#ff0"),
-    Palette("highlighted_header", fore_high="#fff", back_high="#f00"),
-    Palette("highlighted_bold", fore_high="bold,#000", back_high="#ff0"),
-]
 
 
 KEYS = [

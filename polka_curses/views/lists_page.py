@@ -1,5 +1,7 @@
 import urwid
 
+from polka_curses.config import Palette as p
+
 
 class ListsPage(urwid.ListBox):
     def __init__(self, lists):
@@ -18,7 +20,7 @@ class ListItem(urwid.WidgetWrap):
         body = urwid.Text(self.body)
         body = urwid.Padding(body, left=1, right=1)
         item = urwid.LineBox(body, self.header, urwid.LEFT)
-        super().__init__(urwid.AttrMap(item, "frame", "highlighted"))
+        super().__init__(urwid.AttrMap(item, p.frame.name, p.frame_focus.name))
 
     @property
     def header(self):

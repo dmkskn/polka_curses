@@ -184,7 +184,7 @@ class View(urwid.WidgetWrap):
 
     def write_error_the_book_has_no_page(self, book):
         text = f"Нет статьи на книгу «{book.title.upper()}»"
-        self.footer.set_left(text)
+        self.footer.set_left(text, error=True)
 
     def draw_previous(self):
         if self.previous_bodies:

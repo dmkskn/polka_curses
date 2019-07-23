@@ -57,6 +57,7 @@ class Palette(Enum):
     header = PaletteItem("header", fore_high=WHITE, back_high=BLUE)
     header_focus = PaletteItem("header_focus", fore_high=WHITE, back_high=RED)
     footer = PaletteItem("footer", fore_high=WHITE, back_high=BLUE)
+    footer_error = PaletteItem("footer_error", fore_high=WHITE, back_high=RED)
     frame = PaletteItem("frame", fore_high=BLACK, back_high=WHITE)
     frame_focus = PaletteItem("frame_focus", fore_high=BLACK, back_high=YELLOW)
     frame_bold = PaletteItem(

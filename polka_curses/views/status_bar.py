@@ -9,27 +9,32 @@ class StatusBar(urwid.WidgetWrap):
         lcol = urwid.Text(left, align=LEFT)
         rcol = urwid.Text(right, align=RIGHT)
         cols = urwid.Columns([lcol, (PACK, rcol)], dividechars=1)
-        cols = urwid.Padding(cols, left=1, right=1)
         super().__init__(urwid.AttrMap(cols, p.footer.name))
 
     @property
     def cols(self):
-        contents = self._w.original_widget.base_widget.contents
-        return (contents[0][0], contents[1][0])
+        return self._w.original_widget.base_widget.contents
 
     @property
     def left(self):
-        return self.cols[0].text
+        return self.cols[0][0].base_widget.text
 
     @property
     def right(self):
-        return self.cols[1].text
+        return self.cols[1][0].base_widget.text
 
-    def set_left(self, text):
-        self.cols[0].set_text(text)
+    def set_left(self, text, error=False):
+        if error:
+            text = urwid.AttrMap(urwid.Text(text), p.footer_error.name)
+        else:
+            text = urwid.AttrMap(urwid.Text(text), p.footer.name)
+        cols = self._w.original_widget.base_widget
+        cols.contents[0] = (text, cols.contents[0][1])
 
     def set_right(self, text):
-        self.cols[1].set_text(text)
+        text = urwid.AttrMap(urwid.Text(text), p.footer.name)
+        cols = self._w.original_widget.base_widget
+        cols.contents[1] = (text, cols.contents[1][1])
 
     def clear_left(self):
         self.set_left("")

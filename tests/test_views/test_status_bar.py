@@ -21,8 +21,8 @@ def test_get_right(statusbar):
 
 
 def test_get_cols(statusbar):
-    assert isinstance(statusbar.cols[0], urwid.Text)
-    assert isinstance(statusbar.cols[1], urwid.Text)
+    assert isinstance(statusbar.cols[0][0], urwid.Text)
+    assert isinstance(statusbar.cols[1][0], urwid.Text)
 
 
 def test_set_left(statusbar):

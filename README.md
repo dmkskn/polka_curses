@@ -1,1 +1,1 @@
-[![Build Status](https://travis-ci.org/dmkskn/polka_curses.svg?branch=master)](https://travis-ci.org/dmkskn/polka_curses)
+![](./images/install_and_usage.gif)

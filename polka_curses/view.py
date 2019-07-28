@@ -1,19 +1,21 @@
-from functools import wraps
 from collections import deque
+from functools import wraps
 
 import urwid
 
-from .views.books_page import BooksPage
-from .views.lists_page import ListsPage
-from .views.experts_page import ExpertsPage
-from .views.book_page import BookPage
-from .views.list_page import ListPage, ListDescription
-from .views.expert_page import ExpertPage
-from .views.search_page import SearchPage, SearchResultsPage
-from .views.tab_bar import TabBar, TitleHeader
-from .views.status_bar import StatusBar
+from polka_curses.views.search_page import SearchResultsPage
+
 from .config import Palette as p
+from .views.book_page import BookPage
+from .views.books_page import BooksPage
+from .views.expert_page import ExpertPage
+from .views.experts_page import ExpertsPage
+from .views.list_page import ListDescription, ListPage
+from .views.lists_page import ListsPage
 from .views.loading_page import LoadingPage
+from .views.search_page import SearchPage, SearchResultsPage
+from .views.status_bar import StatusBar
+from .views.tab_bar import TabBar, TitleHeader
 
 
 def save_previous(func):
@@ -127,7 +129,7 @@ class View(urwid.WidgetWrap):
         """Returns the search query from a `SearchResultsPage` object"""
         return self.body.get_search_query()
 
-    @in_pages(BooksPage, ListsPage, ExpertsPage, SearchPage)
+    @in_pages(BooksPage, ListsPage, ExpertsPage, SearchPage, SearchResultsPage)
     def focus_previous_tab(self):
         """Focuses the previous tab in the header."""
         if not self.header.is_first_index():
@@ -135,7 +137,7 @@ class View(urwid.WidgetWrap):
             self.footer.clear_left()
         return self.header.get_current_tab()
 
-    @in_pages(BooksPage, ListsPage, ExpertsPage, SearchPage)
+    @in_pages(BooksPage, ListsPage, ExpertsPage, SearchPage, SearchResultsPage)
     def focus_next_tab(self):
         """Focuses the next tab in the header."""
         if not self.header.is_last_index():

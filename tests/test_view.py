@@ -9,6 +9,8 @@ from polka_curses.views.experts_page import ExpertsPage
 from polka_curses.views.list_page import ListPage, ListDescription
 from polka_curses.views.lists_page import ListsPage
 from polka_curses.views.search_page import SearchPage, SearchResultItem
+from polka_curses.views.tab_bar import TabBar
+from polka_curses.views.status_bar import StatusBar
 
 
 LEFT_MESSAGE = "left"
@@ -210,3 +212,18 @@ def test_get_focused_search_result_not_in_search_result_page(view, books):
     view.draw_books(books)
     with pytest.raises(ViewError):
         view.get_focused_search_result()
+
+
+def test_update_loading_page(view_with_loading_page):
+    emoji = view_with_loading_page.body.text
+    view_with_loading_page.update_loading_page()
+    another_emoji = view_with_loading_page.body.text
+    assert emoji != another_emoji
+
+
+def test_init(view_with_loading_page, books):
+    view = view_with_loading_page
+    view.init(books)
+    assert isinstance(view.body, BooksPage)
+    assert isinstance(view.header, TabBar)
+    assert isinstance(view.footer, StatusBar)

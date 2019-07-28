@@ -13,13 +13,6 @@ from polka_curses.views.search_page import SearchPage, SearchResultsPage
 from polka_curses.config import Mode, help_string_for
 
 
-@pytest.fixture()
-def controller():
-    controller = ViewController()
-    controller.loop = MagicMock()
-    return controller
-
-
 def test_exit(controller):
     with pytest.raises(urwid.ExitMainLoop):
         controller.exit()

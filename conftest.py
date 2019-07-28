@@ -63,15 +63,24 @@ def not_expert(book, list_):
 
 
 @pytest.fixture
-def controller():
-    controller = ViewController()
-    controller.loop = MagicMock()
-    return controller
+def view(books):
+    view = View()
+    view.init(books)
+    return view
 
 
 @pytest.fixture
-def view(books):
-    return View(books)
+def view_with_loading_page():
+    return View()
+
+
+@pytest.fixture
+def controller(view):
+    controller = ViewController()
+    controller.loop = MagicMock()
+    controller.view = view
+    controller.mode = Mode.BOOKS_PAGE
+    return controller
 
 
 @pytest.fixture

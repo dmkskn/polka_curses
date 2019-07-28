@@ -1,4 +1,17 @@
+from functools import wraps
+from threading import Thread
+
 import polka
+
+
+def threaded(func):
+    @wraps(func)
+    def async_func(*args, **kwargs):
+        thread = Thread(target=func, args=args, kwargs=kwargs)
+        thread.start()
+        return thread
+
+    return async_func
 
 
 class Model:
@@ -8,7 +21,7 @@ class Model:
         self._books = []
         self._lists = []
         self._experts = []
-        self.get_all()
+        self.is_loaded = False
 
     @property
     def books(self):
@@ -51,8 +64,10 @@ class Model:
     def book_has_article(self, book: polka.Book):
         return book.has_article
 
+    @threaded
     def get_all(self):
         """Preload all data"""
         _ = self.books
         _ = self.lists
         _ = self.experts
+        self.is_loaded = True

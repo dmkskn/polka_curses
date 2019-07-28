@@ -14,6 +14,7 @@ class Mode(Enum):
     LIST_PAGE = "СПИСОК"
     EXPERT_PAGE = "ЭКСПЕРТ"
     LIST_DESCRIPTION_PAGE = "ИНФОРМАЦИЯ О СПИСКЕ"
+    LOADING_PAGE = "СТРАНИЦА ЗАГРУЗКИ"
 
     @classmethod
     def get(cls, raw_value):
@@ -175,7 +176,7 @@ KEYS = [
         description="ВЫХОД",
         buttons=["esc"],
         action="exit",
-        modes=Mode.tabs(),
+        modes=Mode.tabs().union({Mode.LOADING_PAGE}),
     ),
 ]
 

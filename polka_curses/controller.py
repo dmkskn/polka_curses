@@ -4,7 +4,7 @@ from functools import wraps
 
 import urwid
 
-from .config import Palette, Mode, help_string_for
+from .config import Mode, Palette, help_string_for
 from .handler import InputHandler
 from .model import Model
 from .view import View
@@ -26,10 +26,11 @@ class ViewController:
     the `View` and have access to the Polka API through the `Model`."""
 
     def __init__(self):
-        self.mode = Mode.BOOKS_PAGE
+        self.mode = Mode.LOADING_PAGE
         self.last_mode = deque()
         self.model = Model()
-        self.view = View(self.model.books, rmsg=help_string_for(self.mode))
+        self.view = View()
+        self.loading = 10
         self.input_handler = InputHandler(self)
 
     def run(self):
@@ -40,11 +41,30 @@ class ViewController:
         self.loop.screen.reset_default_terminal_palette()
         self.loop.screen.set_terminal_properties(256, False)
         self.loop.screen.register_palette(Palette.as_list())
+        self.set_loading_page()
+        self.model.get_all()
         self.loop.run()
 
     def exit(self):
         """Stop the main loop."""
         raise urwid.ExitMainLoop()
+
+    def set_loading_page(self):
+        callback = self.update_loading_page
+        self.remove_handler = self.loop.set_alarm_in(0.2, callback)
+
+    def remove_loading_page(self):
+        self.loop.remove_alarm(self.remove_handler)
+
+    @update
+    def update_loading_page(self, *args, **kwargs):
+        if self.model.is_loaded:
+            self.remove_loading_page()
+            self.view.init(self.model.books)
+            self.set_mode(Mode.BOOKS_PAGE)
+        else:
+            self.view.update_loading_page()
+            self.set_loading_page()
 
     def set_mode(self, mode, save_last=False):
         if save_last:

@@ -13,6 +13,7 @@ from .views.search_page import SearchPage, SearchResultsPage
 from .views.tab_bar import TabBar, TitleHeader
 from .views.status_bar import StatusBar
 from .config import Palette as p
+from .views.loading_page import LoadingPage
 
 
 def save_previous(func):
@@ -54,15 +55,21 @@ class ViewError(Exception):
 class View(urwid.WidgetWrap):
     """It is intended for managing the UI views."""
 
-    def __init__(self, books, lmsg="", rmsg=""):
-        books = BooksPage(books)
-        tabbar = TabBar(0)
-        statusbar = StatusBar(lmsg, rmsg)
-        self.frame = urwid.Frame(books, tabbar, statusbar)
+    def __init__(self):
+        self.frame = urwid.Frame(LoadingPage())
         self.previous_headers = deque()
         self.previous_bodies = deque()
         self.previous_footers = deque()
         super().__init__(urwid.AttrMap(self.frame, p.frame.name))
+
+    @in_pages(LoadingPage)
+    def update_loading_page(self):
+        self.body.update()
+
+    def init(self, books, lmsg="", rmsg=""):
+        self.set_body(BooksPage(books))
+        self.set_header(TabBar(0))
+        self.set_footer(StatusBar(lmsg, rmsg))
 
     @property
     def header(self):

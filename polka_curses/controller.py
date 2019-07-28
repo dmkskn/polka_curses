@@ -60,7 +60,8 @@ class ViewController:
     def update_loading_page(self, *args, **kwargs):
         if self.model.is_loaded:
             self.remove_loading_page()
-            self.view.init(self.model.books)
+            rmsg = help_string_for(Mode.BOOKS_PAGE)
+            self.view.init(self.model.books, rmsg=rmsg)
             self.set_mode(Mode.BOOKS_PAGE)
         else:
             self.view.update_loading_page()

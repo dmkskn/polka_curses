@@ -8,6 +8,8 @@ Use `pip` to install the program (Python 3.7 is required):
 pip install polka-curses
 ```
 
+Doesn't work in Windows!
+
 ## Usage
 
 To run the program, write `polka`.

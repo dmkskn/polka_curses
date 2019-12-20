@@ -4,9 +4,13 @@ import urwid
 from polka_curses.views.tab_bar import TabBar
 
 
+FIRST_INDEX = 0
+LAST_INDEX = 4
+
+
 @pytest.fixture(scope="function")
 def tabbar():
-    return TabBar(0)
+    return TabBar(FIRST_INDEX)
 
 
 def test_build(tabbar):
@@ -16,15 +20,15 @@ def test_build(tabbar):
 
 
 def test_is_valid_index(tabbar):
-    for i in range(0, 4):
+    for i in range(FIRST_INDEX, LAST_INDEX + 1):
         assert tabbar._is_valid_index(i)
-    assert not tabbar._is_valid_index(-1)
-    assert not tabbar._is_valid_index(4)
-    assert not tabbar._is_valid_index(5)
+    assert not tabbar._is_valid_index(FIRST_INDEX - 1)
+    assert not tabbar._is_valid_index(LAST_INDEX + 1)
+    assert not tabbar._is_valid_index(LAST_INDEX + 2)
 
 
 def test_set_tab(tabbar):
-    for i in range(0, 4):
+    for i in range(FIRST_INDEX, LAST_INDEX):
         try:
             tabbar.set_tab(i)
             assert tabbar.index == i
@@ -35,9 +39,9 @@ def test_set_tab(tabbar):
 
 def test_set_tab_with_wrong_index(tabbar):
     with pytest.raises(IndexError):
-        tabbar.set_tab(-1)
+        tabbar.set_tab(FIRST_INDEX - 1)
     with pytest.raises(IndexError):
-        tabbar.set_tab(4)
+        tabbar.set_tab(LAST_INDEX + 1)
 
 
 def test_get_current_tab(tabbar):
@@ -48,16 +52,18 @@ def test_get_current_tab(tabbar):
     tabbar.set_tab(2)
     assert tabbar.get_current_tab() == "ЭКСПЕРТЫ"
     tabbar.set_tab(3)
+    assert tabbar.get_current_tab() == "ПОДКАСТЫ"
+    tabbar.set_tab(4)
     assert tabbar.get_current_tab() == "ПОИСК"
 
 
 def test_is_first_index(tabbar):
-    tabbar.set_tab(0)
+    tabbar.set_tab(FIRST_INDEX)
     assert tabbar.is_first_index()
     assert not tabbar.is_last_index()
 
 
 def test_is_last_index(tabbar):
-    tabbar.set_tab(3)
+    tabbar.set_tab(LAST_INDEX)
     assert tabbar.is_last_index()
     assert not tabbar.is_first_index()

@@ -10,12 +10,23 @@ from .views.book_page import BookPage
 from .views.books_page import BooksPage
 from .views.expert_page import ExpertPage
 from .views.experts_page import ExpertsPage
+from .views.podcasts_page import PodcastsPage
 from .views.list_page import ListDescription, ListPage
 from .views.lists_page import ListsPage
 from .views.loading_page import LoadingPage
 from .views.search_page import SearchPage, SearchResultsPage
 from .views.status_bar import StatusBar
 from .views.tab_bar import TabBar, TitleHeader
+
+
+TABS = (
+    BooksPage,
+    ListsPage,
+    ExpertsPage,
+    PodcastsPage,
+    SearchPage,
+    SearchResultsPage,
+)
 
 
 def save_previous(func):
@@ -112,6 +123,12 @@ class View(urwid.WidgetWrap):
         self.set_body(ExpertsPage(experts))
         self.set_footer(StatusBar(lmsg, rmsg))
 
+    def draw_podcasts(self, podcasts, lmsg="", rmsg=""):
+        """Replaces the body with an `PodcastsPage` object and the frame
+        footer with a new `StatusBar` object."""
+        self.set_body(PodcastsPage(podcasts))
+        self.set_footer(StatusBar(lmsg, rmsg))
+
     def draw_search(self, lmsg="", rmsg=""):
         """Replaces the body with a `SearchPage` object and the frame
         footer with a new `StatusBar` object."""
@@ -129,7 +146,7 @@ class View(urwid.WidgetWrap):
         """Returns the search query from a `SearchResultsPage` object"""
         return self.body.get_search_query()
 
-    @in_pages(BooksPage, ListsPage, ExpertsPage, SearchPage, SearchResultsPage)
+    @in_pages(*TABS)
     def focus_previous_tab(self):
         """Focuses the previous tab in the header."""
         if not self.header.is_first_index():
@@ -137,7 +154,7 @@ class View(urwid.WidgetWrap):
             self.footer.clear_left()
         return self.header.get_current_tab()
 
-    @in_pages(BooksPage, ListsPage, ExpertsPage, SearchPage, SearchResultsPage)
+    @in_pages(*TABS)
     def focus_next_tab(self):
         """Focuses the next tab in the header."""
         if not self.header.is_last_index():
@@ -215,3 +232,8 @@ class View(urwid.WidgetWrap):
     @in_pages(ExpertPage)
     def get_expert_article_url(self):
         return self.body.expert.url
+
+    @in_pages(PodcastsPage)
+    def get_podcast_article_url(self):
+        podcast = self.body.get_focused_podcast()
+        return podcast.url

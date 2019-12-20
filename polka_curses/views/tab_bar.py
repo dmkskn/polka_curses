@@ -5,7 +5,17 @@ from polka_curses.config import Palette as p
 
 
 class TabBar(urwid.WidgetWrap):
-    TABS = ["КНИГИ", " • ", "СПИСКИ", " • ", "ЭКСПЕРТЫ", " • ", "ПОИСК"]
+    TABS = [
+        "КНИГИ",
+        " • ",
+        "СПИСКИ",
+        " • ",
+        "ЭКСПЕРТЫ",
+        " • ",
+        "ПОДКАСТЫ",
+        " • ",
+        "ПОИСК",
+    ]
 
     def __init__(self, index):
         self.index = index

@@ -70,6 +70,9 @@ class Model:
     def is_expert(self, obj):
         return isinstance(obj, polka.Pundit)
 
+    def is_podcast(self, obj):
+        return isinstance(obj, polka.Podcast)
+
     def book_has_article(self, book: polka.Book):
         return book.has_article
 

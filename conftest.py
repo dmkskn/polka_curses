@@ -33,6 +33,16 @@ def experts(model):
 
 
 @pytest.fixture(scope="module")
+def podcasts(model):
+    return model.podcasts
+
+
+@pytest.fixture(scope="module")
+def podcast(podcasts):
+    return podcasts[0]
+
+
+@pytest.fixture(scope="module")
 def book(books):
     return books[0]
 

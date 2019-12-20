@@ -98,6 +98,8 @@ class ViewController:
             self.view.draw_lists(self.model.lists, rmsg=help_string)
         elif mode == Mode.EXPERTS_PAGE:
             self.view.draw_experts(self.model.experts, rmsg=help_string)
+        elif mode == Mode.PODCASTS_PAGE:
+            self.view.draw_podcasts(self.model.podcasts, rmsg=help_string)
         else:
             self.view.draw_search(rmsg=help_string)
         self.set_mode(mode, save_last=True)
@@ -195,4 +197,6 @@ class ViewController:
             url = self.view.get_list_article_url()
         elif self.mode == Mode.EXPERT_PAGE:
             url = self.view.get_expert_article_url()
+        elif self.mode == Mode.PODCASTS_PAGE:
+            url = self.view.get_podcast_article_url()
         webbrowser.open(url)

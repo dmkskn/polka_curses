@@ -167,6 +167,13 @@ def test_open_in_browser(controller):
         assert mock_webbrowser.called
         assert controller.view.get_expert_article_url.called
 
+    controller.draw_body_by_tab_name(Mode.PODCASTS_PAGE.value)
+    assert controller.get_mode() == Mode.PODCASTS_PAGE
+    with patch("webbrowser.open") as mock_webbrowser:
+        controller.open_in_browser()
+        assert mock_webbrowser.called
+        assert controller.view.get_podcast_article_url.called
+
 
 def test_open_search_result(controller, book, list_, expert):
     controller.view = MagicMock()

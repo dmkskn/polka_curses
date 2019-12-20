@@ -1,4 +1,4 @@
-![Installation and Usage](https://raw.githubusercontent.com/dmkskn/polka_curses/master/images/install_and_usage.gif)
+![Installation and Usage](https://media.githubusercontent.com/media/dmkskn/polka_curses/master/images/install_and_usage.gif)
 
 ## Installation
 

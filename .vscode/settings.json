@@ -4,7 +4,7 @@
     "python.formatting.provider": "black",
     "editor.rulers": [
         79,
-        72
+        72,
     ],
     "editor.formatOnSave": true,
     "editor.trimAutoWhitespace": true,

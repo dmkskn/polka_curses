@@ -21,6 +21,10 @@ def test_search(model):
     assert len(result) == 3
 
 
+def test_podcasts(model):
+    assert [podcast is polka.Podcast for podcast in model.podcasts]
+
+
 def test_book_is_book(model, book, not_book):
     assert model.is_book(book)
     assert not model.is_book(not_book)

@@ -21,6 +21,7 @@ class Model:
         self._books = []
         self._lists = []
         self._experts = []
+        self._podcasts = []
         self.is_loaded = False
 
     @property
@@ -52,6 +53,14 @@ class Model:
         description, object)`."""
         return polka.search(query)
 
+    @property
+    def podcasts(self):
+        """Gets list of podcasts. Each podcast is an instance
+        od polka.Podcast class."""
+        if not self._podcasts:
+            self._podcasts = polka.podcasts()
+        return self._podcasts
+
     def is_book(self, obj):
         return isinstance(obj, polka.Book)
 
@@ -70,4 +79,5 @@ class Model:
         _ = self.books
         _ = self.lists
         _ = self.experts
+        _ = self.podcasts
         self.is_loaded = True

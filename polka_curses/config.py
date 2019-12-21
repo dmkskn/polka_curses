@@ -9,6 +9,7 @@ class Mode(Enum):
     LISTS_PAGE = "СПИСКИ"
     EXPERTS_PAGE = "ЭКСПЕРТЫ"
     PODCASTS_PAGE = "ПОДКАСТЫ"
+    BLOGS_PAGE = "СТАТЬИ"
     SEARCH_PAGE = "ПОИСК"
     SEARCH_RESULTS_PAGE = "РЕЗУЛЬТАТЫ ПОИСКА"
     BOOK_PAGE = "СТАТЬЯ"
@@ -34,6 +35,7 @@ class Mode(Enum):
             cls.LISTS_PAGE,
             cls.EXPERTS_PAGE,
             cls.PODCASTS_PAGE,
+            cls.BLOGS_PAGE,
             cls.SEARCH_PAGE,
             cls.SEARCH_RESULTS_PAGE,
         }
@@ -143,7 +145,7 @@ KEYS = [
         buttons=["enter"],
         action="open_in_browser",
         description="ОТКРЫТЬ В БРАУЗЕРЕ",
-        modes={Mode.PODCASTS_PAGE},
+        modes={Mode.PODCASTS_PAGE, Mode.BLOGS_PAGE},
     ),
     Key(
         name="Enter",

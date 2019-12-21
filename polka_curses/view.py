@@ -11,6 +11,7 @@ from .views.books_page import BooksPage
 from .views.expert_page import ExpertPage
 from .views.experts_page import ExpertsPage
 from .views.podcasts_page import PodcastsPage
+from .views.blogs_page import BlogsPage
 from .views.list_page import ListDescription, ListPage
 from .views.lists_page import ListsPage
 from .views.loading_page import LoadingPage
@@ -24,6 +25,7 @@ TABS = (
     ListsPage,
     ExpertsPage,
     PodcastsPage,
+    BlogsPage,
     SearchPage,
     SearchResultsPage,
 )
@@ -127,6 +129,12 @@ class View(urwid.WidgetWrap):
         """Replaces the body with an `PodcastsPage` object and the frame
         footer with a new `StatusBar` object."""
         self.set_body(PodcastsPage(podcasts))
+        self.set_footer(StatusBar(lmsg, rmsg))
+
+    def draw_blogs(self, blogs, lmsg="", rmsg=""):
+        """Replaces the body with an `BlogsPage` object and the frame
+        footer with a new `StatusBar` object."""
+        self.set_body(BlogsPage(blogs))
         self.set_footer(StatusBar(lmsg, rmsg))
 
     def draw_search(self, lmsg="", rmsg=""):
@@ -237,3 +245,8 @@ class View(urwid.WidgetWrap):
     def get_podcast_article_url(self):
         podcast = self.body.get_focused_podcast()
         return podcast.url
+
+    @in_pages(BlogsPage)
+    def get_blog_article_url(self):
+        blog_article = self.body.get_focused_blog_article()
+        return blog_article.url

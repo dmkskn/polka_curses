@@ -43,6 +43,16 @@ def podcast(podcasts):
 
 
 @pytest.fixture(scope="module")
+def blogs(model):
+    return model.blogs
+
+
+@pytest.fixture(scope="module")
+def blog(blogs):
+    return blogs[0]
+
+
+@pytest.fixture(scope="module")
 def book(books):
     return books[0]
 

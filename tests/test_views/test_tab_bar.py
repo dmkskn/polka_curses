@@ -5,7 +5,7 @@ from polka_curses.views.tab_bar import TabBar
 
 
 FIRST_INDEX = 0
-LAST_INDEX = 4
+LAST_INDEX = 5
 
 
 @pytest.fixture(scope="function")
@@ -54,6 +54,8 @@ def test_get_current_tab(tabbar):
     tabbar.set_tab(3)
     assert tabbar.get_current_tab() == "ПОДКАСТЫ"
     tabbar.set_tab(4)
+    assert tabbar.get_current_tab() == "СТАТЬИ"
+    tabbar.set_tab(5)
     assert tabbar.get_current_tab() == "ПОИСК"
 
 
